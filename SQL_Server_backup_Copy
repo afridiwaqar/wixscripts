@@ -1,0 +1,12 @@
+#!/bin/bash
+
+echo "Stop SQL Server..."
+net rpc service stop MSSQLSERVER -I IP.ADDRESS -U USERNAME%PASSWORD
+
+echo "Copying Backup to DataStore"
+scp -T 'USERNAME@IPADDRESS:"C:\Program Files\Microsoft SQL Server\MSSQL12.MSSQLSERVER\MSSQL\DATA\DBNAME.mdf"' .
+
+echo "Starting SQL Server..."
+net rpc service stop MSSQLSERVER -I IP.ADDRESS -U USERNAME%PASSWORD
+
+echo "All Done"
