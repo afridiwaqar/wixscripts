@@ -1,0 +1,40 @@
+import ldap
+import ldap.modlist as modlist
+
+# make Connection
+
+try:
+	conn = ldap.initialize('ldap://172.16.100.20:389')
+	conn.simple_bind_s('Waqar Afridi', 'wf@#$123')
+
+except ldap.LDAPError, e:
+	print e
+
+# The Distinguished Name of the new entry/object to be made
+
+distinguishedName = "cn=Test_yasar,ou=imsstudent,ou=std,ou=BBA,dc=imsedu,dc=local"
+#distinguishedName = "cn=Test_yasar"  
+
+# A dict to help build the "body" of the object
+attrs = {}
+attrs['objectclass'] = ['top','person','organizationalPerson','user']
+attrs['cn'] = 'Test_yasar'
+attrs['sn'] = 'Khan'
+attrs['givenName'] = 'Yasar'
+attrs['userPassword'] = 'pakistan12345'
+attrs['description'] = 'Just a Test User, Delete if found'
+
+print "CN" + attrs['cn']
+print attrs['sn']
+print attrs['givenName']
+print attrs['userPassword']
+print attrs['description']
+
+# Convert our dict to nice syntax for the add-function using modlist-module
+ldif = modlist.addModlist(attrs)
+
+# Do the actual synchronous add-operation to the ldapserver
+conn.add_s(distinguishedName,ldif)
+
+# Its nice to the server to disconnect and free resources when done
+conn.unbind_s()

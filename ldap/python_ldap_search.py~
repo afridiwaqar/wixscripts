@@ -1,0 +1,15 @@
+import ldap
+
+# make Connection
+
+try:
+	conn = ldap.initialize('ldap://172.16.100.10:389')
+	conn.simple_bind_s('adldap', '@$L$ap16')
+
+except ldap.LDAPError, e:
+	print e
+
+#performing a simple search just to make sure things are doing ok
+
+search_result = conn.search_s('dc=imsedu,dc=local',ldap.SCOPE_SUBTREE,'(cn=adldap)')
+print search_result
